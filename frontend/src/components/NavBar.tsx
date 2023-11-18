@@ -9,7 +9,7 @@ const NavBar: React.FC = () => {
         <h2>
           <Link to="/" className="link-light text-decoration-none">ChatApp</Link>
         </h2>
-        <span className="text-warning">Logged in as Sagar</span>
+        <span className="text-success">Logged in as Sagar</span>
         <Nav>
             <Stack direction="horizontal" gap={3}>
                 <Link to="/login" className="link-light text-decoration-none">Login</Link>
