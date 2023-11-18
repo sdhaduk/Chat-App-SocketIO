@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Alert, Button, Form, Col, Row, Stack } from "react-bootstrap";
-import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 
 const Register: React.FC = () => {
-  const { user } = useContext(AuthContext);
+  const { registerInfo, updateRegisterInfo } = useContext(AuthContext);
 
   return (
     <>
@@ -19,9 +18,30 @@ const Register: React.FC = () => {
           <Col xs={6}>
             <Stack gap={3}>
               <h2>Register</h2>
-              <Form.Control type="text" placeholder="Name" />
-              <Form.Control type="email" placeholder="Email" />
-              <Form.Control type="password" placeholder="Password" />
+              <Form.Control
+                type="text"
+                placeholder="Name"
+                onChange={(e) =>
+                  updateRegisterInfo({ ...registerInfo, name: e.target.value })
+                }
+              />
+              <Form.Control
+                type="email"
+                placeholder="Email"
+                onChange={(e) =>
+                  updateRegisterInfo({ ...registerInfo, email: e.target.value })
+                }
+              />
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                onChange={(e) =>
+                  updateRegisterInfo({
+                    ...registerInfo,
+                    password: e.target.value,
+                  })
+                }
+              />
               <Button variant="success" type="submit">
                 Register
               </Button>
