@@ -1,7 +1,11 @@
 import React from "react";
 import { Alert, Button, Form, Col, Row, Stack } from "react-bootstrap";
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext";
 
 const Register: React.FC = () => {
+  const { user } = useContext(AuthContext);
+
   return (
     <>
       <Form>
