@@ -3,7 +3,7 @@ import Chat from "./pages/Chat";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Nav } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import NavBar from "./components/NavBar";
 
 function App() {
