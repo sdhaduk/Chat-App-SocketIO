@@ -1,40 +1,38 @@
-import React, { createContext, useCallback, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { baseUrl, postRequest } from "../utils/services";
+import { User, Register, Login } from "../types/types";
+
+export const AuthContext = createContext<any>({});
 
 interface Props {
   children: React.ReactNode;
 }
 
-interface Register {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  token: string;
-}
-
-export const AuthContext = createContext<any>({});
-
 export const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
   const [user, setUser] = useState<User | null>(null);
   const [registerError, setRegisterError] = useState<object | null>(null);
   const [isRegisterLoading, setIsRegisterLoading] = useState<boolean>(false);
+  const [loginInfo, setLoginInfo] = useState<Login>({
+    email: "",
+    password: "",
+  });
+
   const [registerInfo, setRegisterInfo] = useState<Register>({
     name: "",
     email: "",
     password: "",
   });
 
-  console.log(user)
+  console.log(user);
 
   useEffect(() => {
     const user = localStorage.getItem("User");
-    user ? setUser(JSON.parse(user)) : setUser(null)
+    user ? setUser(JSON.parse(user)) : setUser(null);
   }, []);
 
   const updateRegisterInfo = useCallback((info: Register) => {
@@ -62,6 +60,10 @@ export const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
     },
     [registerInfo]
   );
+
+  const loginUser = useCallback(() => {
+    
+  }, []);
 
   const logoutUser = useCallback(() => {
     localStorage.removeItem("User");
