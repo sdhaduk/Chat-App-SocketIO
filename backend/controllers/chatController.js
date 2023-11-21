@@ -1,6 +1,6 @@
 import { chatModel } from "../models/chatModel";
 
-const createChat = async (req, res) => {
+export const createChat = async (req, res) => {
   const { firstId, secondId } = req.body;
   try {
     const chat = await chatModel.findOne({
@@ -22,7 +22,7 @@ const createChat = async (req, res) => {
   }
 };
 
-const findUserChats = async (req, res) => {
+export const findUserChats = async (req, res) => {
   const userId = req.params.userId;
 
   try {
@@ -37,7 +37,7 @@ const findUserChats = async (req, res) => {
   }
 };
 
-const findChat = async (req, res) => {
+export const findChat = async (req, res) => {
   const { firstId, secondId } = req.params;
 
   try {
