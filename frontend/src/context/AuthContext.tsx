@@ -61,6 +61,11 @@ export const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
     [registerInfo]
   );
 
+  const logoutUser = useCallback(() => {
+    localStorage.removeItem("User");
+    setUser(null);
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -70,6 +75,7 @@ export const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
         registerError,
         registerUser,
         isRegisterLoading,
+        logoutUser,
       }}
     >
       {children}
