@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/api/users", userRoute);
-app.use("/api/chat", chatRoute);
+app.use("/api/chats", chatRoute);
 
 mongoose.connect(process.env.MONGODB_URL)
 .then(() => {

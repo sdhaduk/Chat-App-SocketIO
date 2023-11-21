@@ -10,7 +10,7 @@ export const createChat = async (req, res) => {
     if (chat) return res.status(200).json(chat);
 
     const newChat = new chatModel({
-      members: [firstId, secondId],
+      members: [firstId, secondId], 
     });
 
     const response = await newChat.save();
