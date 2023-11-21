@@ -3,11 +3,13 @@ import cors from "cors";
 import mongoose from "mongoose";
 import "dotenv/config";
 import userRoute from "./routes/userRoute.js";
+import chatRoute from "./routes/chatRoute.js";
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/api/users", userRoute);
+app.use("/api/chat", chatRoute);
 
 mongoose.connect(process.env.MONGODB_URL)
 .then(() => {
