@@ -1,4 +1,4 @@
-import { chatModel } from "../models/chatModel";
+import { chatModel } from "../models/chatModel.js";
 
 export const createChat = async (req, res) => {
   const { firstId, secondId } = req.body;
@@ -41,7 +41,7 @@ export const findChat = async (req, res) => {
   const { firstId, secondId } = req.params;
 
   try {
-    const chat = await chatModel.find({
+    const chat = await chatModel.findOne({
       members: { $all: [firstId, secondId] },
     });
 
