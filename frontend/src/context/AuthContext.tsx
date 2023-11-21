@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, postRequest } from "../utils/services";
 
 interface Props {
@@ -11,10 +11,17 @@ interface Register {
   password: string;
 }
 
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  token: string;
+}
+
 export const AuthContext = createContext<any>({});
 
 export const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [registerError, setRegisterError] = useState<object | null>(null);
   const [isRegisterLoading, setIsRegisterLoading] = useState<boolean>(false);
   const [registerInfo, setRegisterInfo] = useState<Register>({
@@ -23,31 +30,48 @@ export const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
     password: "",
   });
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("User") || "{}");
+    setUser(user);
+  }, []);
+
   const updateRegisterInfo = useCallback((info: Register) => {
     setRegisterInfo(info);
   }, []);
 
-  const registerUser = useCallback(async (e:Event) => {
-    e.preventDefault()  
-    setIsRegisterLoading(true);
-    setRegisterError(null);
+  const registerUser = useCallback(
+    async (e: Event) => {
+      e.preventDefault();
+      setIsRegisterLoading(true);
+      setRegisterError(null);
 
-    const response = await postRequest(
-      `${baseUrl}/users/register`,
-      JSON.stringify(registerInfo)
-    );
+      const response = await postRequest(
+        `${baseUrl}/users/register`,
+        JSON.stringify(registerInfo)
+      );
 
-    setIsRegisterLoading(false);
+      setIsRegisterLoading(false);
 
-    if (response.error) {
-      return setRegisterError(response);
-    }
-    localStorage.setItem("User", JSON.stringify(response));
-    setUser(response);
-  }, [registerInfo]);
+      if (response.error) {
+        return setRegisterError(response);
+      }
+      localStorage.setItem("User", JSON.stringify(response));
+      setUser(response);
+    },
+    [registerInfo]
+  );
 
   return (
-    <AuthContext.Provider value={{ user, registerInfo, updateRegisterInfo, registerError, registerUser, isRegisterLoading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        registerInfo,
+        updateRegisterInfo,
+        registerError,
+        registerUser,
+        isRegisterLoading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
