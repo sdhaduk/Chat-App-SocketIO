@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, getRequest, postRequest } from "../utils/services.ts";
 import { User, ChatType } from "../types/types.ts";
 
@@ -29,7 +29,7 @@ export const ChatContextProvider: React.FC<Props> = ({
       const pChats = response.filter((u: User) => {
         let isChatCreated = false;
 
-        if (user._id === u._id) return false;
+        if (user?._id === u._id) return false;
 
         if (userChats) {
           isChatCreated = userChats?.some((chat) => {
@@ -67,6 +67,22 @@ export const ChatContextProvider: React.FC<Props> = ({
     getUserChats();
   }, [user]);
 
+  const createChat = useCallback(async (firstId: string, secondId: string) => {
+    const response = await postRequest(
+      `${baseUrl}/chats`,
+      JSON.stringify({ firstId, secondId })
+    );
+
+    if (response.error) {
+      return console.log(response.error);
+    }
+
+    setUserChats((prev: any) => [...prev, response]);
+    console.log("user-chats", userChats);
+  }, []);
+
+  console.log("user-chats", userChats);
+
   return (
     <>
       <ChatContext.Provider
@@ -75,6 +91,7 @@ export const ChatContextProvider: React.FC<Props> = ({
           isUserChatsLoading,
           userChatsError,
           potentialChats,
+          createChat,
         }}
       >
         {children}
