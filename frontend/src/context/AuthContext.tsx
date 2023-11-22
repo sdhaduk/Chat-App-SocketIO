@@ -26,8 +26,6 @@ export const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
     password: "",
   });
 
-  console.log(user);
-
   useEffect(() => {
     const user = localStorage.getItem("User");
     user ? setUser(JSON.parse(user)) : setUser(null);
