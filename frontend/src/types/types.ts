@@ -31,4 +31,13 @@ interface RecipientUser {
   updatedAt: string;
 }
 
-export type { Register, User, Login, Chat as ChatType, RecipientUser };
+interface Message {
+  _id: string;
+  chatId: string;
+  senderId: string;
+  text: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type { Register, User, Login, Chat as ChatType, RecipientUser, Message };
