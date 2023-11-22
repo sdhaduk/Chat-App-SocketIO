@@ -8,7 +8,7 @@ import PotentialChats from "../components/chat/PotentialChats";
 
 const Chat: React.FC = () => {
   const { user } = useContext(AuthContext);
-  const { userChats, isUserChatsLoading, userChatsError } =
+  const { userChats, isUserChatsLoading, updateCurrentChat } =
     useContext(ChatContext);
 
   return (
@@ -20,7 +20,7 @@ const Chat: React.FC = () => {
             {isUserChatsLoading && <p>Loading chats...</p>}
             {userChats?.map((chat: ChatType, index: number) => {
               return (
-                <div key={index}>
+                <div key={index} onClick={() => updateCurrentChat(chat)}>
                   <UserChat chat={chat} user={user} />
                 </div>
               );

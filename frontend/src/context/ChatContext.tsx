@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, getRequest, postRequest } from "../utils/services.ts";
-import { User, ChatType } from "../types/types.ts";
+import { User, ChatType, Message } from "../types/types.ts";
 
 interface Props {
   children: React.ReactNode;
@@ -17,6 +17,12 @@ export const ChatContextProvider: React.FC<Props> = ({
   const [isUserChatsLoading, setIsUserChatsLoading] = useState<boolean>(false);
   const [userChatsError, setUserChatsError] = useState<object | null>(null);
   const [potentialChats, setPotentialChats] = useState<User[]>([]);
+  const [currentChat, setCurrentChat] = useState<ChatType | null>(null);
+  const [messages, setMessages] = useState<Message[] | null>(null);
+  const [messagesError, setMessagesError] = useState<object | null>(null);
+  const [isMessagesLoading, setIsMessagesLoading] = useState<boolean>(false);
+
+  console.log("messages", messages);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -67,6 +73,27 @@ export const ChatContextProvider: React.FC<Props> = ({
     getUserChats();
   }, [user]);
 
+  useEffect(() => {
+    const getMessages = async () => {
+      setIsMessagesLoading(true);
+      setMessagesError(null);
+
+      const response = await getRequest(
+        `${baseUrl}/messages/${currentChat?._id}`
+      );
+
+      setIsMessagesLoading(false);
+
+      if (response.error) {
+        return setMessagesError(response);
+      }
+
+      setMessages(response);
+    };
+
+    getMessages();
+  }, [currentChat]);
+
   const createChat = useCallback(async (firstId: string, secondId: string) => {
     const response = await postRequest(
       `${baseUrl}/chats`,
@@ -80,6 +107,10 @@ export const ChatContextProvider: React.FC<Props> = ({
     setUserChats((prev: any) => [...prev, response]);
   }, []);
 
+  const updateCurrentChat = useCallback((chat: ChatType) => {
+    setCurrentChat(chat);
+  }, []);
+
   return (
     <>
       <ChatContext.Provider
@@ -89,6 +120,10 @@ export const ChatContextProvider: React.FC<Props> = ({
           userChatsError,
           potentialChats,
           createChat,
+          updateCurrentChat,
+          messages,
+          isMessagesLoading,
+          messagesError
         }}
       >
         {children}
