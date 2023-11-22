@@ -5,6 +5,7 @@ import UserChat from "../components/chat/UserChat";
 import { AuthContext } from "../context/AuthContext";
 import { ChatType } from "../types/types";
 import PotentialChats from "../components/chat/PotentialChats";
+import ChatBox from "../components/chat/ChatBox";
 
 const Chat: React.FC = () => {
   const { user } = useContext(AuthContext);
@@ -26,7 +27,7 @@ const Chat: React.FC = () => {
               );
             })}
           </Stack>
-          <p>ChatBox</p>
+          <ChatBox />
         </Stack>
       )}
     </Container>

@@ -22,8 +22,6 @@ export const ChatContextProvider: React.FC<Props> = ({
   const [messagesError, setMessagesError] = useState<object | null>(null);
   const [isMessagesLoading, setIsMessagesLoading] = useState<boolean>(false);
 
-  console.log("messages", messages);
-
   useEffect(() => {
     const getUsers = async () => {
       const response = await getRequest(`${baseUrl}/users`);
@@ -123,7 +121,8 @@ export const ChatContextProvider: React.FC<Props> = ({
           updateCurrentChat,
           messages,
           isMessagesLoading,
-          messagesError
+          messagesError,
+          currentChat
         }}
       >
         {children}
