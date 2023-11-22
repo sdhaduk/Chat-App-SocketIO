@@ -78,10 +78,7 @@ export const ChatContextProvider: React.FC<Props> = ({
     }
 
     setUserChats((prev: any) => [...prev, response]);
-    console.log("user-chats", userChats);
   }, []);
-
-  console.log("user-chats", userChats);
 
   return (
     <>
