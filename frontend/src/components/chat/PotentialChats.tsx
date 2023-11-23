@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
-import { User } from "../../types/types";
+import { OnlineUser, User } from "../../types/types";
 import { AuthContext } from "../../context/AuthContext";
 
 const PotentialChats: React.FC = () => {
-  const { potentialChats, createChat } = useContext(ChatContext);
+  const { potentialChats, createChat, onlineUsers } = useContext(ChatContext);
   const { user } = useContext(AuthContext);
 
   return (
@@ -19,7 +19,15 @@ const PotentialChats: React.FC = () => {
                 onClick={() => createChat(user._id, u._id)}
               >
                 {u.name}
-                <span className="user-online"></span>
+                <span
+                  className={
+                    onlineUsers?.some(
+                      (user: OnlineUser) => user?.userId === u?._id
+                    )
+                      ? "user-online"
+                      : "user-offline"
+                  }
+                ></span>
               </div>
             );
           })}
