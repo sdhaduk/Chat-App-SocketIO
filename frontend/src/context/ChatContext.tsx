@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, getRequest, postRequest } from "../utils/services.ts";
 import { User, ChatType, Message } from "../types/types.ts";
+import { io } from "socket.io-client";
 
 interface Props {
   children: React.ReactNode;
@@ -23,8 +24,18 @@ export const ChatContextProvider: React.FC<Props> = ({
   const [isMessagesLoading, setIsMessagesLoading] = useState<boolean>(false);
   const [sendTextMessageError, setSendTextMessageError] = useState<
     object | null
-  >(null);
+  >(null); 
   const [newMessage, setNewMessage] = useState<Message | null>(null);
+  const [socket, setSocket] = useState<any>(null);
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:8000");
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    }
+  }, [user]);
 
   useEffect(() => {
     const getUsers = async () => {
