@@ -40,4 +40,9 @@ interface Message {
   updatedAt: Date;
 }
 
-export type { Register, User, Login, Chat as ChatType, RecipientUser, Message };
+interface OnlineUser {
+  socketId: string;
+  userId: string;
+}
+
+export type { Register, User, Login, Chat as ChatType, RecipientUser, Message, OnlineUser };
