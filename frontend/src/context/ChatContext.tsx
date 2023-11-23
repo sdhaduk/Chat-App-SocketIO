@@ -122,7 +122,6 @@ export const ChatContextProvider: React.FC<Props> = ({
       setMessages((prev: any) => [...prev, response]);
       setTextMessage("");
     },
-
     []
   );
 
@@ -157,7 +156,7 @@ export const ChatContextProvider: React.FC<Props> = ({
           isMessagesLoading,
           messagesError,
           currentChat,
-          sendTextMessage 
+          sendTextMessage,
         }}
       >
         {children}
