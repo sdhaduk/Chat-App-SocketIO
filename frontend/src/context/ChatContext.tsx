@@ -44,6 +44,10 @@ export const ChatContextProvider: React.FC<Props> = ({
     socket.on("getOnlineUsers", (res: OnlineUser[]) => {
       setOnlineUsers(res);
     });
+
+    return () => {
+      socket.off("getOnlineUsers");
+    };
   }, [socket]);
 
   useEffect(() => {
