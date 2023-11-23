@@ -21,6 +21,10 @@ export const ChatContextProvider: React.FC<Props> = ({
   const [messages, setMessages] = useState<Message[] | null>(null);
   const [messagesError, setMessagesError] = useState<object | null>(null);
   const [isMessagesLoading, setIsMessagesLoading] = useState<boolean>(false);
+  const [sendTextMessageError, setSendTextMessageError] = useState<
+    object | null
+  >(null);
+  const [newMessage, setNewMessage] = useState<Message | null>(null);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -92,6 +96,36 @@ export const ChatContextProvider: React.FC<Props> = ({
     getMessages();
   }, [currentChat]);
 
+  const sendTextMessage = useCallback(
+    async (
+      textMessage: string,
+      sender: User,
+      currentChatId: string,
+      setTextMessage: any
+    ) => {
+      if (!textMessage) return console.log("Type a messsage...");
+
+      const response = await postRequest(
+        `${baseUrl}/messages`,
+        JSON.stringify({
+          chatId: currentChatId,
+          senderId: sender,
+          text: textMessage,
+        })
+      );
+
+      if (response.error) {
+        return setSendTextMessageError(response);
+      }
+
+      setNewMessage(response);
+      setMessages((prev: any) => [...prev, response]);
+      setTextMessage("");
+    },
+
+    []
+  );
+
   const createChat = useCallback(async (firstId: string, secondId: string) => {
     const response = await postRequest(
       `${baseUrl}/chats`,
@@ -122,7 +156,8 @@ export const ChatContextProvider: React.FC<Props> = ({
           messages,
           isMessagesLoading,
           messagesError,
-          currentChat
+          currentChat,
+          sendTextMessage 
         }}
       >
         {children}
