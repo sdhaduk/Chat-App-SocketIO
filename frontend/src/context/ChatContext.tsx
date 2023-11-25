@@ -2,6 +2,7 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, getRequest, postRequest } from "../utils/services.ts";
 import { User, ChatType, Message, OnlineUser } from "../types/types.ts";
 import { io } from "socket.io-client";
+import { Prev } from "react-bootstrap/lib/Pagination";
 
 interface Props {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ export const ChatContextProvider: React.FC<Props> = ({
   const [socket, setSocket] = useState<any>(null);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
 
+  //connect to socket
   useEffect(() => {
     const newSocket = io("http://localhost:8080");
     setSocket(newSocket);
@@ -38,6 +40,7 @@ export const ChatContextProvider: React.FC<Props> = ({
     };
   }, [user]);
 
+  //add online users
   useEffect(() => {
     if (socket === null) return;
     socket.emit("addNewUser", user?._id);
@@ -49,6 +52,30 @@ export const ChatContextProvider: React.FC<Props> = ({
       socket.off("getOnlineUsers");
     };
   }, [socket]);
+
+  //send message
+  useEffect(() => {
+    if (socket === null) return;
+
+    const recipientId = currentChat?.members?.find((id) => id !== user?._id);
+
+    socket.emit("sendMessage", { ...newMessage, recipientId });
+  }, [newMessage]);
+
+  // recieve message
+  useEffect(() => {
+    if (socket === null) return;
+
+    socket.on("getMessage", (res: any) => {
+      if (currentChat?._id !== res.chatId) return;
+
+      setMessages((prev: any) => [...prev, res]);
+    });
+
+    return () => {
+      socket.off("getMessage");
+    };
+  }, [socket, currentChat]);
 
   useEffect(() => {
     const getUsers = async () => {
